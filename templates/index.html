@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday My Love! 💝</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --warm-gradient: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            --cool-gradient: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #667eea, #764ba2);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 6rem 1rem 2rem 1rem;
+            position: relative;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            padding: 3rem;
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        .navigation {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            border: none;
+            background: transparent;
+            color: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .title-gradient {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #667eea, #764ba2, #f093fb, #f5576c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            line-height: 1.1;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 192, 203, 0.7);
+            font-size: 1.5rem;
+            animation: floatUp 8s infinite ease-in-out;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            aspect-ratio: 1;
+            cursor: pointer;
+            transform: scale(1);
+            transition: all 0.3s ease;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .photo-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-item:hover .photo-overlay {
+            transform: translateY(0);
+        }
+
+        .memory-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05));
+            border-radius: 1rem;
+            padding: 2rem;
+            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .memory-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .countdown-timer {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .timer-unit {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .music-player {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .interactive-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .interactive-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 2rem;
+            padding: 3rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .wishes-container {
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 2rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .wish-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            margin: 0.5rem 0;
+            border-radius: 0.5rem;
+            border-left: 3px solid #667eea;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes floatUp {
+            0% { 
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { 
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(-100vh) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(720deg); }
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            animation: confetti 3s linear infinite;
+        }
+
+        @media (max-width: 768px) {
+            .glass-card { padding: 2rem 1.5rem; }
+            .navigation { top: 1rem; padding: 0.5rem; }
+            .nav-btn { padding: 0.5rem 1rem; font-size: 0.875rem; }
+            .countdown-timer { grid-template-columns: repeat(2, 1fr); }
+            .page-container { padding: 5rem 1rem 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="floating-hearts"></div>
+
+    <nav class="navigation">
+        <button class="nav-btn active" data-page="home">🏠 Home</button>
+        <button class="nav-btn" data-page="gallery">📸 Gallery</button>
+        <button class="nav-btn" data-page="memories">💕 Memories</button>
+        <button class="nav-btn" data-page="countdown">⏰ Special</button>
+        <button class="nav-btn" data-page="wishes">💌 Wishes</button>
+    </nav>
+
+    <div class="page-container">
+        <div class="page active" id="home">
+            <div class="glass-card">
+                <h1 class="title-gradient">Happy Birthday, My Geliii💕💕</h1>
+                
+                <div class="text-center mb-8">
+                    <div class="inline-block p-8 rounded-full bg-gradient-to-r from-pink-400 to-purple-500 mb-6">
+                        <div class="text-6xl">🎂</div>
+                    </div>
+                    <p class="text-white text-xl leading-relaxed max-w-2xl mx-auto">
+                        Today is all about celebrating the most amazing person in my life. Every moment with you is a treasure, and I can't wait to create more beautiful memories together. 
+                    </p>
+                </div>
+
+                <audio id="birthday-song" src="{{ song_url }}" preload="auto"></audio>
+
+                <div class="music-player">
+                    <h3 class="text-white text-lg font-semibold mb-4">🎵 Your Birthday Song</h3>
+                    <button class="interactive-btn" id="play-music">Play Our Song</button>
+                    <p class="text-white text-sm mt-2 opacity-75">Click to play some birthday magic!</p>
+                </div>
+
+                <div class="text-center">
+                    <button class="interactive-btn mr-4" id="surprise-btn">🎁 Special Surprise</button>
+                    <button class="interactive-btn" id="love-letter-btn">💕 Love Letter</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="gallery">
+            <div class="glass-card">
+                <h2 class="title-gradient">Our Beautiful Moments</h2>
+                
+<div class="photo-grid" id="photo-grid">
+    {% for photo in photos %}
+    <div class="photo-item" style="background-image: url('{{ photo.url }}');">
+        <div class="photo-overlay">
+            <p class="text-sm">{{ photo.caption }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+                <div class="text-center mt-8">
+                    <p class="text-white text-lg opacity-90">
+                        Each photo tells a story of our love.
+                    </p>
+                    <button class="interactive-btn mt-4" id="slideshow-btn">🎬 Start Slideshow</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="memories">
+            <div class="glass-card">
+                <h2 class="title-gradient">Our Love Story</h2>
+                
+                <div class="memory-card">
+                    <h3 class="text-2xl font-semibold text-white mb-4">💫 The Day We Met</h3>
+                    <p class="text-white opacity-90 leading-relaxed">
+                        It feels like yesterday when our paths crossed for the first time. That magical moment when I knew you were someone special who would change my life forever.
+                    </p>
+                </div>
+
+                <div class="memory-card">
+                    <h3 class="text-2xl font-semibold text-white mb-4">💕 Our First Date</h3>
+                    <p class="text-white opacity-90 leading-relaxed">
+                        The butterflies, the laughter, the way time seemed to stop when I looked into your eyes. That perfect evening that marked the beginning of our beautiful journey together.
+                    </p>
+                </div>
+
+                <div class="memory-card">
+                    <h3 class="text-2xl font-semibold text-white mb-4">🌟 This Moment</h3>
+                    <p class="text-white opacity-90 leading-relaxed">
+                        Here we are, celebrating another year of your amazing life. Every day with you is a gift, and I'm grateful for every laugh, every adventure, and every quiet moment we share.
+                    </p>
+                </div>
+
+                <div class="text-center mt-8">
+                    <button class="interactive-btn" id="add-memory-btn">➕ Add New Memory</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="countdown">
+            <div class="glass-card">
+                <h2 class="title-gradient">Time Together</h2>
+                
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl font-semibold text-white mb-4">⏰ Days We've Been Together</h3>
+                    <div class="countdown-timer">
+                        <div class="timer-unit">
+                            <div class="text-3xl font-bold text-white" id="years">0</div>
+                            <div class="text-white opacity-75">Years</div>
+                        </div>
+                        <div class="timer-unit">
+                            <div class="text-3xl font-bold text-white" id="months">0</div>
+                            <div class="text-white opacity-75">Months</div>
+                        </div>
+                        <div class="timer-unit">
+                            <div class="text-3xl font-bold text-white" id="days">0</div>
+                            <div class="text-white opacity-75">Days</div>
+                        </div>
+                        <div class="timer-unit">
+                            <div class="text-3xl font-bold text-white" id="hours">0</div>
+                            <div class="text-white opacity-75">Hours</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="memory-card text-center">
+                    <h3 class="text-2xl font-semibold text-white mb-4">🎯 Next Adventure</h3>
+                    <p class="text-white opacity-90 leading-relaxed mb-4">
+                        Let's plan something amazing for our next milestone! What adventure shall we embark on together?
+                    </p>
+                    <button class="interactive-btn" id="plan-adventure-btn">🗓️ Plan Together</button>
+                </div>
+
+                <div class="text-center mt-8">
+                    <h3 class="text-xl font-semibold text-white mb-4">🌟 Special Moments Counter</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="timer-unit">
+                            <div class="text-2xl font-bold text-white">∞</div>
+                            <div class="text-white opacity-75">Kisses</div>
+                        </div>
+                        <div class="timer-unit">
+                            <div class="text-2xl font-bold text-white">∞</div>
+                            <div class="text-white opacity-75">Hugs</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="wishes">
+            <div class="glass-card">
+                <h2 class="title-gradient">Birthday Wishes</h2>
+                
+                <div class="text-center mb-6">
+                    <p class="text-white text-lg opacity-90">
+                        Send your birthday wishes and see them come to life!
+                    </p>
+                </div>
+
+                <div class="mb-6">
+                    <input type="text" id="wish-input" placeholder="Type your birthday wish..." 
+                           class="w-full p-3 rounded-full bg-white/10 border border-white/20 text-white placeholder-white/70 focus:outline-none focus:border-white/50">
+                    <button class="interactive-btn mt-4 w-full" id="send-wish-btn">✨ Send Wish</button>
+                </div>
+
+                <div class="wishes-container" id="wishes-container">
+                    <div class="wish-item">
+                        <p class="text-white">🎂 Wishing you the happiest birthday filled with love and joy!</p>
+                        <small class="text-white opacity-50">- Your Loving Partner</small>
+                    </div>
+                    <div class="wish-item">
+                        <p class="text-white">🌟 May all your dreams come true this year and always!</p>
+                        <small class="text-white opacity-50">- Universe</small>
+                    </div>
+                    <div class="wish-item">
+                        <p class="text-white">💖 Another year of being amazing - keep shining bright!</p>
+                        <small class="text-white opacity-50">- Your Heart</small>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button class="interactive-btn" id="wish-shower-btn">🎊 Wish Shower</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="surprise-modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4" style="color: #667eea;">🎁 Special Surprise!</h3>
+            <p class="mb-6 text-gray-700">
+                You are the most incredible person I know. Your smile brightens my darkest days, your laugh is my favorite sound, and your love is my greatest treasure. Happy Birthday, beautiful! 💕
+            </p>
+            <button class="interactive-btn" onclick="closeModal('surprise-modal')">Close</button>
+        </div>
+    </div>
+
+    <div class="modal" id="love-letter-modal">
+        <div class="modal-content">
+            <h3 class="text-2xl font-bold mb-4" style="color: #667eea;">💌 Love Letter</h3>
+            <div class="text-left text-gray-700 mb-6">
+                <p class="mb-4">My Dearest Love,</p>
+                <p class="mb-4">
+                    On this special day, I want you to know how deeply you are loved and cherished. You bring magic into every ordinary moment, and adventure into every day.
+                </p>
+                <p class="mb-4">
+                    Thank you for being you - for your kindness, your strength, your beautiful heart, and the way you make everything better just by being there.
+                </p>
+                <p class="mb-4">Forever yours,<br>❤️</p>
+            </div>
+            <button class="interactive-btn" onclick="closeModal('love-letter-modal')">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // Navigation
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const pages = document.querySelectorAll('.page');
+
+        navButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetPage = btn.dataset.page;
+                
+                // Update active nav button
+                navButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Show target page
+                pages.forEach(p => p.classList.remove('active'));
+                document.getElementById(targetPage).classList.add('active');
+            });
+        });
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            createConfetti();
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('surprise-btn').addEventListener('click', () => {
+            openModal('surprise-modal');
+        });
+
+        document.getElementById('love-letter-btn').addEventListener('click', () => {
+            openModal('love-letter-modal');
+        });
+
+        // Floating hearts animation
+        function createFloatingHearts() {
+            const heartsContainer = document.getElementById('floating-hearts');
+            const hearts = ['💖', '💕', '💓', '💗', '💔', '💞', '💘'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                heart.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                heartsContainer.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 8000);
+            }, 2000);
+        }
+
+        // Confetti effect
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#23a6d5', '#23d5ab'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.animationDelay = Math.random() * 2 + 's';
+                confetti.style.animationDuration = Math.random() * 2 + 3 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+    // Countdown timer
+    function updateCountdown() {
+        // Use the date passed from the Flask backend
+        const anniversary_date_str = "{{ anniversary_date }}";
+        const startDate = new Date(anniversary_date_str);
+        const now = new Date();
+        const diff = now - startDate;
+        
+        const years = Math.floor(diff / (365 * 24 * 60 * 60 * 1000));
+        const months = Math.floor((diff % (365 * 24 * 60 * 60 * 1000)) / (30 * 24 * 60 * 60 * 1000));
+        const days = Math.floor((diff % (30 * 24 * 60 * 60 * 1000)) / (24 * 60 * 60 * 1000));
+        const hours = Math.floor((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+        
+        document.getElementById('years').textContent = years;
+        document.getElementById('months').textContent = months;
+        document.getElementById('days').textContent = days;
+        document.getElementById('hours').textContent = hours;
+    }
+
+
+        // Wishes functionality
+        document.getElementById('send-wish-btn').addEventListener('click', () => {
+            const wishInput = document.getElementById('wish-input');
+            const wishText = wishInput.value.trim();
+            
+            if (wishText) {
+                const wishesContainer = document.getElementById('wishes-container');
+                const wishItem = document.createElement('div');
+                wishItem.className = 'wish-item';
+                wishItem.innerHTML = `
+                    <p class="text-white">✨ ${wishText}</p>
+                    <small class="text-white opacity-50">- Just now</small>
+                `;
+                
+                wishesContainer.insertBefore(wishItem, wishesContainer.firstChild);
+                wishInput.value = '';
+                createConfetti();
+            }
+        });
+
+        // Wish shower effect
+        document.getElementById('wish-shower-btn').addEventListener('click', () => {
+            const wishes = ['🌟', '✨', '💫', '⭐', '🎊', '🎉'];
+            
+            for (let i = 0; i < 50; i++) {
+                const wish = document.createElement('div');
+                wish.textContent = wishes[Math.floor(Math.random() * wishes.length)];
+                wish.style.position = 'fixed';
+                wish.style.left = Math.random() * 100 + 'vw';
+                wish.style.top = '-50px';
+                wish.style.fontSize = '2rem';
+                wish.style.zIndex = '1000';
+                wish.style.animation = `confetti ${Math.random() * 2 + 3}s linear forwards`;
+                
+                document.body.appendChild(wish);
+                
+                setTimeout(() => {
+                    wish.remove();
+                }, 5000);
+            }
+        });
+
+        // Music player functionality
+        document.getElementById('play-music').addEventListener('click', () => {
+            const btn = document.getElementById('play-music');
+            const song = document.getElementById('birthday-song');
+
+            if (song.paused) {
+                song.play();
+                btn.textContent = '🎵 Pause Song';
+                createConfetti();
+            } else {
+                song.pause();
+                btn.textContent = 'Play Our Song';
+            }
+        });
+
+        // Photo gallery slideshow
+        document.getElementById('slideshow-btn').addEventListener('click', () => {
+            const photos = document.querySelectorAll('.photo-item[style*="background-image"], .photo-item[style*="background:"]');
+            
+            if (photos.length === 0) {
+                alert('📸 Add some photos first to start the slideshow!');
+                return;
+            }
+            
+            let currentIndex = 0;
+            const modal = document.createElement('div');
+            modal.className = 'modal';
+            modal.style.display = 'block';
+            modal.innerHTML = `
+                <div class="modal-content" style="max-width: 80%; max-height: 80%;">
+                    <div style="position: relative; width: 100%; height: 400px; background-size: cover; background-position: center; border-radius: 1rem;" id="slideshow-image"></div>
+                    <div class="flex justify-between items-center mt-4">
+                        <button class="interactive-btn" id="prev-slide-btn">← Previous</button>
+                        <span class="text-gray-600" id="slide-counter">1 of ${photos.length}</span>
+                        <button class="interactive-btn" id="next-slide-btn">Next →</button>
+                    </div>
+                    <button class="interactive-btn mt-4" id="close-slideshow-btn">Close</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            function updateSlide() {
+                const slideshowImage = document.getElementById('slideshow-image');
+                const counter = document.getElementById('slide-counter');
+                const bgImage = photos[currentIndex].style.background || photos[currentIndex].style.backgroundImage;
+                slideshowImage.style.background = bgImage;
+                counter.textContent = `${currentIndex + 1} of ${photos.length}`;
+            }
+            
+            document.getElementById('next-slide-btn').addEventListener('click', () => {
+                currentIndex = (currentIndex + 1) % photos.length;
+                updateSlide();
+            });
+            
+            document.getElementById('prev-slide-btn').addEventListener('click', () => {
+                currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+                updateSlide();
+            });
+            
+            document.getElementById('close-slideshow-btn').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            updateSlide();
+        });
+
+        // Plan adventure
+        document.getElementById('plan-adventure-btn').addEventListener('click', () => {
+            alert('🗓️ Adventure planning mode activated! Let\'s dream big together!');
+        });
+
+        // Add memory functionality
+        document.getElementById('add-memory-btn').addEventListener('click', () => {
+            const memory = prompt('💕 Share a special memory:');
+            if (memory) {
+                alert('Memory saved in our hearts! 💖');
+                createConfetti();
+            }
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        });
+
+        // Initialize
+        createFloatingHearts();
+        updateCountdown();
+        setInterval(updateCountdown, 60000); // Update every minute
+
+        // Enter key support for wish input
+        document.getElementById('wish-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('send-wish-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>
